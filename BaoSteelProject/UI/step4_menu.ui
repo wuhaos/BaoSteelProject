@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1123</width>
+    <height>874</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="next_image">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>40</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>下一张</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="analysis">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>40</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>分析</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="full_select">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>40</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>全选</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1123</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>操作</string>
+    </property>
+    <addaction name="parameter_setting"/>
+    <addaction name="real_time_setting"/>
+    <addaction name="auto_analysis"/>
+    <addaction name="exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>试验报告</string>
+    </property>
+    <addaction name="open_report"/>
+    <addaction name="modify_report"/>
+    <addaction name="save_report"/>
+    <addaction name="print_report"/>
+    <addaction name="query_report"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>试验数据</string>
+    </property>
+    <addaction name="open_excel"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>方式</string>
+    </property>
+    <addaction name="offline_analysis"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="parameter_setting">
+   <property name="text">
+    <string>参数设置</string>
+   </property>
+  </action>
+  <action name="real_time_setting">
+   <property name="text">
+    <string>实时显示</string>
+   </property>
+  </action>
+  <action name="auto_analysis">
+   <property name="text">
+    <string>自动分析</string>
+   </property>
+  </action>
+  <action name="exit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="open_report">
+   <property name="text">
+    <string>打开文件</string>
+   </property>
+  </action>
+  <action name="modify_report">
+   <property name="text">
+    <string>修改报告</string>
+   </property>
+  </action>
+  <action name="save_report">
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="print_report">
+   <property name="text">
+    <string>打印</string>
+   </property>
+  </action>
+  <action name="query_report">
+   <property name="text">
+    <string>历史报告查询</string>
+   </property>
+  </action>
+  <action name="open_excel">
+   <property name="text">
+    <string>打开Excel</string>
+   </property>
+  </action>
+  <action name="offline_analysis">
+   <property name="text">
+    <string>离线分析</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
