@@ -14,8 +14,9 @@ from UI import query_report, global_setting
 import cv2 as cv
 from Core import Camera, generatePDF
 from Core.neuralNet import predict
-from Core import ReportImage,WriteExcel
+from Core import ReportImage, WriteExcel
 import datetime
+import os
 
 
 class Step2Menu(QtWidgets.QMainWindow):
@@ -88,6 +89,7 @@ class Step2Menu(QtWidgets.QMainWindow):
         self.open_report.triggered.connect(self.openFile)
         self.handExit.triggered.connect(self.handClose)
         self.open_excel.triggered.connect(self.openExcel)
+        self.offline_analysis.triggered.connect(self.offlineAnalysis)
 
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -105,7 +107,7 @@ class Step2Menu(QtWidgets.QMainWindow):
         """保存路径"""
         self.isSaveImage = False
         self.originImageSaveDir = ""
-        self.preidctImageSaveDir = ""
+        self.predictImageSaveDir = ""
         self.offlineSaveReportDir = ""
         self.onlineSaveReportDir = ""
 
@@ -146,7 +148,7 @@ class Step2Menu(QtWidgets.QMainWindow):
         self.camera = Camera.Camera()
         self.chkpth = "File/config/step2_3.pth"
         self.n_class = 9
-        self.stepLength = 1
+        self.stepLength = 920
         self.Predict = predict.Predict(chkpth=self.chkpth, n_classes=self.n_class)
         self.imgPath = b"File/config/step4.pth"
         self.classArea = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -204,13 +206,13 @@ class Step2Menu(QtWidgets.QMainWindow):
         analyseize image
         :return:
         '''
-        img = cv.imread(self.imgPath)
+        img = cv.imread(self.imagePath)
         mark = self.Predict.predict(image=img, stepLength=self.stepLength)
         if self.isSaveImage:
             colorMark = np.zeros((mark.shape[0], mark.shape[1], 3))
             for i in range(0, self.n_class):
                 colorMark[mark == i] = self.classColor[i]
-            cv.imwrite(self.preidctImageSaveDir + '/' + self.imagePath.split('/')[-1], colorMark)
+            cv.imwrite(self.predictImageSaveDir + '/' + self.imagePath.split('/')[-1], colorMark)
         for i in range(0, self.n_class):
             self.classArea[i] += len(np.where(mark == i)[0])
 
@@ -252,10 +254,44 @@ class Step2Menu(QtWidgets.QMainWindow):
         self.testParmter[1] = self.startTime + '-' + self.endTime[-5:]
         self.testParmter[5] = "自动分析方式"
         self.testParmter[6] = str(imageIdx)
+        self.getClassProportition()
+        tmpTime = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M")
+        reportSavePath = self.onlineSaveReportDir + '/' + self.testParmter[3] + '#' + tmpTime + '.png'
+        self.testParmter[7] = reportSavePath
+        self.generateReport(reportSavePath=reportSavePath)
+        self.writeExcel()
+        QtWidgets.QMessageBox.warning(self, '提示', '分析完毕')
 
-    def generateReport(self):
+    def offlineAnalysis(self):
+        self.startTime = datetime.datetime.now().strftime("%Y.%m.%d %H:%M")
+        self.offlineOriginImageDir = QtWidgets.QFileDialog.getExistingDirectory()
+        imageIdx = 0
+        if self.offlineOriginImageDir != '':
+            for l in os.listdir(self.offlineOriginImageDir):
+                suffix = l.split('.')[-1]
+                if suffix == 'png' or suffix == 'bmp' or suffix == 'jpg' or suffix == 'tif':
+                    imageIdx += 1
+                    print(l)
+                    self.imagePath = self.offlineOriginImageDir + '/' + l
+                    self.analyseImage()
+                else:
+                    continue
+
+        self.endTime = datetime.datetime.now().strftime("%Y.%m.%d %H:%M")
+        self.testParmter[1] = self.startTime + '-' + self.endTime[-5:]
+        self.testParmter[5] = "离线分析方式"
+        self.testParmter[6] = str(imageIdx)
+        self.getClassProportition()
+        tmpTime = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M")
+        reportSavePath = self.offlineSaveReportDir + '/' + self.testParmter[3] + '#' + tmpTime + '.png'
+        self.testParmter[7] = reportSavePath
+        self.generateReport(reportSavePath=reportSavePath)
+        self.writeExcel()
+        QtWidgets.QMessageBox.warning(self, '提示', '分析完毕')
+
+    def generateReport(self,reportSavePath = ''):
         self.generateReportImage(piePath='m.png')
-        PDF = generatePDF.GeneratePDF(pdfSavePath='a.pdf',
+        PDF = generatePDF.GeneratePDF(pdfSavePath=reportSavePath,
                                       imagePath='m.png',
                                       paramValue=self.testParmter,
                                       className=self.className,
@@ -280,6 +316,6 @@ class Step2Menu(QtWidgets.QMainWindow):
 
     def writeExcel(self):
         excel = WriteExcel.WriteReaderExcel('./File/record/2.xlsx')
-        excel.WriteStep2(header=self.header,footer=self.page,timeRange=[self.startTime,self.endTime],
-                         paramter=self.testParmter,classValue=self.classProportition)
+        excel.WriteStep2(header=self.header, footer=self.page, timeRange=[self.startTime, self.endTime],
+                         paramter=self.testParmter, classValue=self.classProportition)
         pass

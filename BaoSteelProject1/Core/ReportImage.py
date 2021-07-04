@@ -90,12 +90,24 @@ class ReportImage(QtWidgets.QMainWindow):
         plt.savefig(imagePath)
         plt.show()
 
+    def generatePlotStep4(self,classSum = [],classHoleDiameter = [],imagePath = ''):
+        # plt.figure(figsize=(9,4.5))
+        plt.rcParams['font.sans-serif'] = ['KaiTi']  # 指定默认字体
+        fig, ax = plt.subplots()
+        ax.plot(classHoleDiameter,classSum[0],label='溶蚀型')
+        # ax.plot(classHoleDiameter,classSum[1],label='test1')
+        plt.legend()
+        plt.show()
 
 
-# App = QtWidgets.QApplication(sys.argv)
-# window = ReportImage()
+
+
+
+App = QtWidgets.QApplication(sys.argv)
+window = ReportImage()
 # # window.generatePie(['溶蚀型磁铁矿','针状铁酸钙','柱状铁酸钙','玻璃箱和溶剂','原生赤铁矿','二次赤铁矿','字型Σ(っ °Д °;)磁铁矿','孔洞','其它'],[0.89,0.11,0.11,0.11,0.12,0.23,0.50,0.45,0.99])
 # # window.generateHistogram(['溶蚀型磁铁矿','针状铁酸钙','柱状铁酸钙','玻璃箱和溶剂','原生赤铁矿','二次赤铁矿','字型Σ(っ °Д °;)磁铁矿','孔洞','其它'],[9000,1000,4000,6000,40,60,5000,23000,14000],['0.89%','0.11%','0.11%','0.11%','0.11%','0.11%','0.11%','0.11%','0.11%'])
 # window.generateHistStep2(['溶蚀型磁铁矿','针状铁酸钙','柱状铁酸钙','玻璃箱和溶剂','原生赤铁矿','二次赤铁矿','字型磁铁矿','孔洞','其它'],[0.89,0.11,0.11,0.11,0.12,0.23,0.50,0.45,0.99])
+window.generatePlotStep4(classSum=[[0.12,0.13,0.25,0.17,0.19,0.24,0.47],[0.32,0.23,0.45,0.10,0.09,0.34,0.20]],classHoleDiameter=[50,100,200,300,500,800,1000])
 # window.show()
 # sys.exit(App.exec_())

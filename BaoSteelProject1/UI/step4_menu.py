@@ -173,9 +173,11 @@ class Step4Menu(QtWidgets.QMainWindow):
         self.offlinOriginImageList = []
         self.offlineOriginImageDir = ""
         self.holeAreaSum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.holeAreaStandard = [50, 100, 200, 300, 400, 500, 600, 800, 1000, 1200000]
+        self.holeDiameter = [50, 100, 200, 300, 400, 500, 600, 800, 1000, 1200000]
+        self.holeAreaStandard = []
         for i in range(0, 10):
-            self.holeAreaStandard[i] = int(pow((self.holeAreaStandard[i] / 2) / 1.44, 2) * 3.14)
+            self.holeAreaStandard.append(int(pow((self.holeDiameter[i] / 2) / 1.44, 2) * 3.14))
+        self.holeAreaProportition = []
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
@@ -389,7 +391,7 @@ class Step4Menu(QtWidgets.QMainWindow):
             self.full_select.setEnabled(False)
             pass
 
-            QtWidgets.QMessageBox.warning(self, '提示', '已经分析完毕')
+            QtWidgets.QMessageBox.warning(self, '提示', '分析完毕')
             return
 
         self.camera.stage.setPosition(self.curPositionX, self.curPositionY)
@@ -420,5 +422,9 @@ class Step4Menu(QtWidgets.QMainWindow):
             self.analysis.setEnabled(False)
             self.full_select.setEnabled(False)
             pass
+            QtWidgets.QMessageBox.warning(self, '提示', '分析完毕')
 
-            QtWidgets.QMessageBox.warning(self, '提示', '所选文件夹图片已经全部分析完毕')
+    def getHoleAreaProportition(self):
+        for i in range(0, len(self.holeAreaStandard)):
+            self.holeAreaProportition.append(round(self.holeAreaSum[i] / self.classSum[1] * 100, 2))
+

@@ -24,7 +24,6 @@ class GraphicsView(QtWidgets.QGraphicsView):
         self.filename = ""
         self.setFrameStyle(QFrame.NoFrame)
         self.backimg = step4_backImage.backImage()
-        # self.backimg = step4_backImage.backImage(parent=self)
         self.loadImage = False
 
     def initial_path(self):
